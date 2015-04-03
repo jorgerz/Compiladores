@@ -27,7 +27,7 @@ public class ReadFile {
 		try{
 			while( ( message = br.readLine() ) != null ){
 				messageComplete += message;
-				//messageComplete += "\n";				
+				messageComplete += "\n";				
 			}
 		} catch( IOException e ){
 			System.out.println( "Error: " + e.getMessage() );

@@ -13,8 +13,14 @@ public class Application {
 	public void start(){
 		archivo = new ReadFile("Archivos/prueba.txt");
 		archivo.readFile();	
-		String[] source = archivo.getContentTextFile().split(" ");
+		//String[] source = archivo.getContentTextFile().split(" ");		
+		String[] content = archivo.getContentTextFile().split("\n");
+		String[][] source = new String[content.length][];
+		for(int i = 0; i < content.length; i++){
+			source[i] = content[i].split(" ");							
+		}
 		lex = new Lexer(source);
+		lex.fileUsed(archivo);
 		lex.initLexer();		
 	}
 }

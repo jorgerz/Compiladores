@@ -7,6 +7,8 @@ public class Token implements ValidTokens{
 	List<Token> tokens;
 	public String text;
 	public TokenType type;
+	boolean flag = false;
+	public String comment = ""; 
 	
 	public Token( String text, TokenType type ){
 		this.text = text;
@@ -41,22 +43,65 @@ public class Token implements ValidTokens{
 		return tokens;
 	}
 	
+	public List<Token> tokenize(String[][] source, String[] contentLines){
+		tokens = new ArrayList<Token>();
+		TokenizeState state = TokenizeState.DEFAULT;
+		String token = "";
+		
+		
+		boolean found;
+		String str;
+		for( int k = 0; k < source.length; k++ ){
+			flag = false;
+			for( int i = 0; i < source[k].length; i++ ){			
+				found = false;					
+				for( int j = 0; j < stringTokens.length; j++ ){
+					if( source[k][i].equals( stringTokens[j] ) ){
+						tokens.add( new Token( source[k][i], tokenType[0][j] ));
+						found = true;					
+						break;
+					}
+					
+				}					
+				if( found == false)
+				{						
+					str = source[k][i];
+					addSingleToken(str);					
+				}
+				if(flag == true && i == source[k].length - 1){
+					comment = contentLines[k];
+					tokens.add(new Token(comment, TokenType.COMENTARIO));                
+					comment = "";					
+				}
+			}
+			
+		}
+		
+		
+		return tokens;
+	}
+	
 	private void addSingleToken(String source){		
 		String token = "";
 		boolean foundDot = false;
 		System.out.println(source);
+		boolean out = false;
 		TokenizeState state = TokenizeState.DEFAULT;
 		for(int i =0;i<source.length();i++){			           
-			char c = source.charAt(i);												
+			char c = source.charAt(i);						
+			if(flag == true)
+				state = TokenizeState.COMENTARIO;
             switch (state) {
 	            case DEFAULT:
 	                if (charTokens.indexOf(c) != -1) {
-	                	if( c == '-' && source.length() > 1 ){	                		
+	                	if( source.length() > 1 ){
+	                		out = true;
 		                	tokens.add(new Token("Token no valido", tokenError));
 		                	break;
 	                	}
 	                	else{
 	                		tokens.add(new Token(Character.toString(c), tokenType[1][charTokens.indexOf(c)]));
+	                		break;
 	                	}
 	                } else if (Character.isLetter(c)) {
 	                    token += c;
@@ -77,10 +122,12 @@ public class Token implements ValidTokens{
 	                else if ( c=='@' ) {	                	
 	                	token+= c;
 	                    state = TokenizeState.COMENTARIO;
-	                    if(i == source.length() - 1 ){		                	
-		                    tokens.add(new Token(token, TokenType.COMENTARIO));
-		                    break;                   
-		                }
+	                    flag = true;
+	                    comment += token;
+//	                    if(i == source.length() - 1 ){		                	
+//		                    tokens.add(new Token(token, TokenType.COMENTARIO));
+//		                    break;                   
+//		                }
 	                } else{
 	                	tokens.add(new Token("Token no valido", tokenError));
 	                	break;	                
@@ -126,16 +173,21 @@ public class Token implements ValidTokens{
 	                break;
 	                	                	              
 	            case COMENTARIO:	            	
-	            	if (  Character.isLetterOrDigit(c) || c == '_') {
-	            		state = TokenizeState.COMENTARIO;
-	                    token += c;
-	                    if(i == source.length() - 1 ){
-		                    tokens.add(new Token(token, TokenType.COMENTARIO));
-		                    break;
-		                }
-	                }
+//	            	if(flag == true)
+//	            		
+//		            	if (  Character.isLetterOrDigit(c) || c == '_' || c == ' ' ) {
+//		            		state = TokenizeState.COMENTARIO;
+//		                    token += c;
+//		                    comment+= token;
+//		                    if(i == source.length() - 1 ){
+//			                    tokens.add(new Token(token, TokenType.COMENTARIO));
+//			                    break;
+//			                }
+//		                }
 	                break;
             }
+            if(out)
+            	break;
 		}
 		
 	}
