@@ -7,17 +7,15 @@ public class ReadFile {
 	private FileInputStream fis;
 	private BufferedReader br;
 	private DataInputStream dis;
-	private String message;
-	private String file;
+	private String message;	
 	private String messageComplete;
 	private int counter = 0;
 	
-	public ReadFile( String fileName ){
+	public ReadFile( String filename ){
 		try{
-			message = "";
-			file="prueba.txt";
+			message = "";			
 			messageComplete = "";
-			fis = new FileInputStream( file );
+			fis = new FileInputStream( filename );
 			dis = new DataInputStream( fis );
 			br = new BufferedReader( new InputStreamReader( dis ) );
 		} catch( IOException e ){
@@ -29,8 +27,7 @@ public class ReadFile {
 		try{
 			while( ( message = br.readLine() ) != null ){
 				messageComplete += message;
-				messageComplete += "\n";
-				System.out.println(messageComplete);
+				//messageComplete += "\n";				
 			}
 		} catch( IOException e ){
 			System.out.println( "Error: " + e.getMessage() );

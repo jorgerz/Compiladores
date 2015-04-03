@@ -1,1 +1,0 @@
-Inicio_de_programa Leer N prom=0 I=3.5 Mientras I < N Inicio Leer calificacion prom = prom + calificacion I = I + 1 Fin prom = prom / N Escribir prom Fin_de_programa

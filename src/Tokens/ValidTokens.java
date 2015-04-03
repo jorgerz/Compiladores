@@ -8,13 +8,13 @@ public interface ValidTokens {
 	 * */
 	String[] stringTokens = {
 			"Inicio-de-programa", "Fin-de-programa", "Leer", "Escribir", "Si", 
-			"Entonces", "Mientras", "Inicio", "Fin", ">=", "<=", "==", "!="
+			"Entonces", "Mientras", "Inicio", "Fin","Identificador", ">=", "<=", "==", "!="
 	};	
 	/*
 	 * Estos carácteres solo sirven para aquellos tokens cuyo contenido sea
 	 * igual a un carácter 
 	 * */
-	String charTokens = "+-*/%><";
+	String charTokens = "+-*/%><_:";
 	
 	/*
 	 * Estos son los tipos de tokens que se puede encontrar durante el proceso,
@@ -31,6 +31,8 @@ public interface ValidTokens {
 		{
 			TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO,
 			TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_RELACIONAL,
-			TokenType.OPERADOR_RELACIONAL
+			TokenType.OPERADOR_RELACIONAL, TokenType.GUION_BAJO,TokenType.DOS_PUNTOS, TokenType.COMENTARIO
 	} };
+	
+	TokenType tokenError = TokenType.ERROR;
 }
