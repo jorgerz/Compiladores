@@ -1,0 +1,40 @@
+0	Token: Token no valido		Tipo: ERROR
+1	Token: HEAD		Tipo: IDENTIFICADOR
+2	Token: Inicio-de-programa		Tipo: INICIO_PROGRAMA
+3	Token: Leer		Tipo: LEER
+4	Token: N		Tipo: IDENTIFICADOR
+5	Token: Escribir		Tipo: ESCRIBIR
+6	Token: prom		Tipo: IDENTIFICADOR
+7	Token: Fin-de-programa		Tipo: FIN_PROGRAMA
+8	Token: 3.4		Tipo: FLOTANTE
+9	Token: Token no valido		Tipo: ERROR
+10	Token: Token no valido		Tipo: ERROR
+11	Token: 3.4 5 -5 @co		Tipo: COMENTARIO
+12	Token: Token no valido		Tipo: ERROR
+13	Token: Token no valido		Tipo: ERROR
+14	Token: Token no valido		Tipo: ERROR
+15	Token: Token no valido		Tipo: ERROR
+16	Token: Token no valido		Tipo: ERROR
+17	Token: Token no valido		Tipo: ERROR
+18	Token: Token no valido		Tipo: ERROR
+19	Token: Inicio-de-programa		Tipo: INICIO_PROGRAMA
+20	Token: Leer		Tipo: LEER
+21	Token: N		Tipo: IDENTIFICADOR
+22	Token: Escribir		Tipo: ESCRIBIR
+23	Token: prom		Tipo: IDENTIFICADOR
+24	Token: Fin-de-programa		Tipo: FIN_PROGRAMA
+25	Token: 3.4		Tipo: FLOTANTE
+26	Token: Token no valido		Tipo: ERROR
+27	Token: Token no valido		Tipo: ERROR
+28	Token: Token no valido		Tipo: ERROR
+29	Token: +		Tipo: OPERADOR_ARITMETICO
+30	Token: -		Tipo: OPERADOR_ARITMETICO
+31	Token: /		Tipo: OPERADOR_ARITMETICO
+32	Token: %		Tipo: OPERADOR_ARITMETICO
+33	Token: >		Tipo: OPERADOR_RELACIONAL
+34	Token: @comentario a ver a		Tipo: COMENTARIO
+35	Token: %		Tipo: OPERADOR_ARITMETICO
+36	Token: x		Tipo: IDENTIFICADOR
+37	Token: Token no valido		Tipo: ERROR
+38	Token: Token no valido		Tipo: ERROR
+39	Token: originmaster		Tipo: IDENTIFICADOR
