@@ -87,10 +87,11 @@ public class ApplicationLexer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tokenize)
-                    .addComponent(jLabel1)
-                    .addComponent(resultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resultado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tokenize)
+                        .addComponent(jLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
@@ -151,7 +152,7 @@ public class ApplicationLexer extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarMouseClicked
 
     private void tokenizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tokenizeMouseClicked
-       String[] content = archivo.getContentTextFile().split("\n");
+        String[] content = archivo.getContentTextFile().split("\n");
         String[][] source = new String[content.length][];
         for(int i = 0; i < content.length; i++){
                 source[i] = content[i].split(" ");							
@@ -160,6 +161,7 @@ public class ApplicationLexer extends javax.swing.JFrame {
         lex = new Lexer(source);
         lex.fileUsed(archivo,textAreaTokens,resultado);
         lex.initLexer();
+        TablaVariables tablaVar = new TablaVariables(lex.getTokens());
     }//GEN-LAST:event_tokenizeMouseClicked
 
     private void identificadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_identificadorMouseClicked

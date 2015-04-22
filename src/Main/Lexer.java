@@ -28,13 +28,13 @@ public class Lexer{
     private ReadFile file;
     private String  iden="IDENTIFICADOR";
     private Almacenar almacena;
-    ArrayList<Token> tokenList = new ArrayList();
+    ArrayList<Token> tokenList = new ArrayList();    
     Token token = new Token(null,null);
     private JTextArea textAreaTokens;
     private JLabel resultado;
     ParseMetodos parse;
     private boolean flag = false;
-    TablaVariables tabla = new TablaVariables();
+    //TablaVariables tabla = new TablaVariables();
     private Hashtable<String,TablaVariables> variables = new  Hashtable<String, TablaVariables>();
     private String info;
 	
@@ -53,7 +53,7 @@ public class Lexer{
             tokenList=(ArrayList<Token>) token.tokenize(src,contentLines);
             parse = new ParseMetodos(tokenList);
             showTokens();
-            showParse();
+            //showParse();
            
     }
 
@@ -64,14 +64,18 @@ public class Lexer{
             if(tokenList.get(i).getToken()==iden){
                 datos1=Integer.toString(i)+" TOken: "+tokenList.get(i).getText()+"\n";
                 info=tokenList.get(i).getText();
-                tabla.setValor(null);
-                variables.put(info, tabla);
+                //tabla.setValor(null);
+                //variables.put(info, tabla);
                 datos.add(datos1);
                 j++;
             }
         }
     }
 
+    public ArrayList getTokens(){
+        return tokenList;
+    }
+    
     public String getContentTextFile(){
         return file.getContentTextFile();
     }
