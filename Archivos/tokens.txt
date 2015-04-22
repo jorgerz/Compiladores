@@ -1,0 +1,16 @@
+0	Token: Inicio-de-programa		Tipo: INICIO_PROGRAMA
+1	Token: Mientras		Tipo: MIENTRAS
+2	Token: I		Tipo: IDENTIFICADOR
+3	Token: <		Tipo: OPERADOR_RELACIONAL
+4	Token: prom		Tipo: IDENTIFICADOR
+5	Token: Entonces		Tipo: ENTONCES
+6	Token: Inicio		Tipo: INICIO
+7	Token: prom		Tipo: IDENTIFICADOR
+8	Token: =		Tipo: IGUAL
+9	Token: Prom		Tipo: IDENTIFICADOR
+10	Token: +		Tipo: OPERADOR_ARITMETICO
+11	Token: calificacion		Tipo: IDENTIFICADOR
+12	Token: Escribir		Tipo: ESCRIBIR
+13	Token: calificacion		Tipo: IDENTIFICADOR
+14	Token: Fin		Tipo: FIN
+15	Token: Fin-de-programa		Tipo: FIN_PROGRAMA

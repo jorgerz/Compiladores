@@ -1,29 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Tokens;
 
-/**
- *
- * @author Jorge
- */
 public interface ValidTokens {
 	
 	/*
 	 * Estas cadenas solo sirve para aquellos tokens cuyo contenido sea mayor o 
-	 * igual a dos carÃ¡cteres, sin importar el tipo de token que sean
+	 * igual a dos carácteres, sin importar el tipo de token que sean
 	 * */
 	String[] stringTokens = {
 			"Inicio-de-programa", "Fin-de-programa", "Leer", "Escribir", "Si", 
 			"Entonces", "Mientras", "Inicio", "Fin","Identificador", ">=", "<=", "==", "!="
 	};	
 	/*
-	 * Estos carÃ¡cteres solo sirven para aquellos tokens cuyo contenido sea
-	 * igual a un carÃ¡cter 
+	 * Estos carácteres solo sirven para aquellos tokens cuyo contenido sea
+	 * igual a un carácter 
 	 * */
-	String charTokens = "+-*/%><_=";
+	String charTokens = "+-*/%><_:";
 	
 	/*
 	 * Estos son los tipos de tokens que se puede encontrar durante el proceso,
@@ -40,7 +31,7 @@ public interface ValidTokens {
 		{
 			TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO,
 			TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_ARITMETICO, TokenType.OPERADOR_RELACIONAL,
-			TokenType.OPERADOR_RELACIONAL, TokenType.GUION_BAJO,TokenType.IGUAL, TokenType.COMENTARIO
+			TokenType.OPERADOR_RELACIONAL, TokenType.GUION_BAJO,TokenType.DOS_PUNTOS, TokenType.COMENTARIO
 	} };
 	
 	TokenType tokenError = TokenType.ERROR;
