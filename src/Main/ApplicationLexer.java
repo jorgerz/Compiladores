@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package Main;
+import Tokens.TablaVariables;
 import FilesManagement.ReadFile;
 import FilesManagement.WriteFile;
+import Tokens.ListStatement;
+import parse.ParseMetodos;
 /**
  *
  * @author Jorge
@@ -14,6 +17,10 @@ public class ApplicationLexer extends javax.swing.JFrame {
     ReadFile archivo;
     WriteFile archivo2;
     Lexer lex;
+    ParseMetodos parser;
+    ListStatement statements;
+    TablaVariables varsTable;
+    
     /**
      * Creates new form ApplicationLexer
      */
@@ -38,6 +45,8 @@ public class ApplicationLexer extends javax.swing.JFrame {
         textAreaTokens = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         resultado = new javax.swing.JLabel();
+        parse = new javax.swing.JButton();
+        interpreter = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         abrir = new javax.swing.JMenu();
         guardar = new javax.swing.JMenu();
@@ -64,6 +73,25 @@ public class ApplicationLexer extends javax.swing.JFrame {
 
         resultado.setText("Esperando...");
 
+        parse.setText("ParseMetodos");
+        parse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                parseMouseClicked(evt);
+            }
+        });
+
+        interpreter.setText("Interpreter");
+        interpreter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                interpreterMouseClicked(evt);
+            }
+        });
+        interpreter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                interpreterActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -73,12 +101,18 @@ public class ApplicationLexer extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(tokenize)
-                        .addGap(37, 37, 37)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(parse)
+                        .addGap(18, 18, 18)
+                        .addComponent(interpreter)
+                        .addGap(27, 27, 27)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(resultado, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(jScrollPane2)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -87,12 +121,13 @@ public class ApplicationLexer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(resultado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tokenize)
-                        .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tokenize)
+                    .addComponent(jLabel1)
+                    .addComponent(resultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(interpreter)
+                    .addComponent(parse))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
@@ -157,11 +192,16 @@ public class ApplicationLexer extends javax.swing.JFrame {
         for(int i = 0; i < content.length; i++){
                 source[i] = content[i].split(" ");							
         }
-        textAreaTokens.append("");
+        textAreaTokens.setText("");
         lex = new Lexer(source);
-        lex.fileUsed(archivo,textAreaTokens,resultado);
+        lex.fileUsed(archivo,textAreaTokens);
         lex.initLexer();
-        TablaVariables tablaVar = new TablaVariables(lex.getTokens());
+        varsTable = new TablaVariables(lex.getTokens());
+        textAreaTokens.setEditable(false);
+        lex.showTokens(textAreaTokens);
+        //textAreaTokens.setText();
+        //ParseMetodos parse = new ParseMetodos(lex.getTokens());
+        //parse.showResults(resultado);
     }//GEN-LAST:event_tokenizeMouseClicked
 
     private void identificadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_identificadorMouseClicked
@@ -170,6 +210,22 @@ public class ApplicationLexer extends javax.swing.JFrame {
         archivo2.saveFile(lex.guardar());
         archivo2.closeFile();
     }//GEN-LAST:event_identificadorMouseClicked
+
+    private void parseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parseMouseClicked
+        // TODO add your handling code here:
+        //lex.showParse(resultado);
+        parser = new ParseMetodos(lex.getTokens(), varsTable);
+        parser.showResults(resultado);
+    }//GEN-LAST:event_parseMouseClicked
+
+    private void interpreterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interpreterActionPerformed
+
+    }//GEN-LAST:event_interpreterActionPerformed
+
+    private void interpreterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_interpreterMouseClicked
+        statements = new ListStatement( parser.getAllStatements() );
+        statements.executeProgram();        
+    }//GEN-LAST:event_interpreterMouseClicked
 
     /**
      * @param args the command line arguments
@@ -211,11 +267,13 @@ public class ApplicationLexer extends javax.swing.JFrame {
     private javax.swing.JMenu abrir;
     private javax.swing.JMenu guardar;
     private javax.swing.JMenu identificador;
+    private javax.swing.JButton interpreter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton parse;
     private javax.swing.JLabel resultado;
     private javax.swing.JTextArea textAreaTokens;
     private javax.swing.JButton tokenize;

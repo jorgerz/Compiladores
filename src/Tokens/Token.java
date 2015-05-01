@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Token implements ValidTokens{
 	
-	List<Token> tokens;
+	ArrayList<Token> tokens;
 	public String text;
 	public TokenType type;
 	boolean flag = false;

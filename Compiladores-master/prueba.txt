@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+Inicio-de-programa 
+Leer N  
+Escribir prom 
+Fin-de-programa 
+3.4 5 -5 @co
+=======
+Inicio-de-programa Leer N Escribir prom Fin-de-programa 3.4 5 -5 +-/ + - / % >
+@comentario a ver a
+% x
+>>>>>>> origin/master

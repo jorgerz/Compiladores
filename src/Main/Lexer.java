@@ -9,6 +9,7 @@ package Main;
  *
  * @author Jorge
  */
+import Tokens.TablaVariables;
 import java.awt.List;
 import java.util.ArrayList;
 
@@ -34,7 +35,6 @@ public class Lexer{
     private JLabel resultado;
     ParseMetodos parse;
     private boolean flag = false;
-    //TablaVariables tabla = new TablaVariables();
     private Hashtable<String,TablaVariables> variables = new  Hashtable<String, TablaVariables>();
     private String info;
 	
@@ -48,24 +48,17 @@ public class Lexer{
     }
 
     public void initLexer(){		
-//		tokenList=(ArrayList<Token>) token.tokenize(source);
-            String[] contentLines = getContentTextFile().split("\n");
-            tokenList=(ArrayList<Token>) token.tokenize(src,contentLines);
-            parse = new ParseMetodos(tokenList);
-            showTokens();
-            //showParse();
-           
+        String[] contentLines = getContentTextFile().split("\n");
+        tokenList=(ArrayList<Token>) token.tokenize(src,contentLines);;          
     }
 
-    private void showTokens() {
+    public void showTokens(JTextArea textAreaTokens) {
         int j=0;
         for(int i=0; i<tokenList.size(); i++){
             textAreaTokens.append(i+"	Token: "+tokenList.get(i).getText()+ "		Tipo: "+tokenList.get(i).getToken()+"\n");
             if(tokenList.get(i).getToken()==iden){
                 datos1=Integer.toString(i)+" TOken: "+tokenList.get(i).getText()+"\n";
                 info=tokenList.get(i).getText();
-                //tabla.setValor(null);
-                //variables.put(info, tabla);
                 datos.add(datos1);
                 j++;
             }
@@ -88,13 +81,12 @@ public class Lexer{
         return datos1;
     }
 
-    public void fileUsed(ReadFile file, JTextArea textAreaTokens, JLabel resultado){
+    public void fileUsed(ReadFile file, JTextArea textAreaTokens){
         this.file = file;
         this.textAreaTokens=textAreaTokens;
-        this.resultado=resultado;
     }
 
-    private void showParse() {
+    public void showParse(JLabel resultado) {
         flag = parse.evaluarParser();
         if(flag){
             resultado.setText("Exito en el programa");
