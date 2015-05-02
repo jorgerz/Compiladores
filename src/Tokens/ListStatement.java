@@ -5,6 +5,7 @@
  */
 package Tokens;
 
+import Main.Write;
 import java.util.ArrayList;
 import parse.*;
 
@@ -24,35 +25,68 @@ public class ListStatement {
         int instruction = 0;
         Statement actualStatement;
         boolean startLoop = false;
+        System.out.println("Tamano del programa: "+statements.size());
+        Write.OutText("Sentencias del programa");
         while( i < statements.size()){  
-            if(instruction != -1)
-                i = instruction;            
             actualStatement = (Statement) statements.get(i);
-            instruction = -1;
-            if(actualStatement.isSentenciaAsignacionSimple()){
-                SentenciaAsignacionSimple sas = (SentenciaAsignacionSimple)actualStatement.getStatement();
-                sas.execute();
+            if(actualStatement.isSentenciaAsignacionSimple()){             
+                Write.OutText("SentenciaAsignacionSimple");
             }
             else if(actualStatement.isSentenciaAsignacionOperacion()){
-                SentenciaAsignacionOperacion sao = (SentenciaAsignacionOperacion)actualStatement.getStatement();
+                Write.OutText("SentenciaAsignacionOperacion");
+            }
+            else if(actualStatement.isSentenciaCondicion()){          
+                Write.OutText("SentenciaCondicion");
+            }            
+            else if(actualStatement.isSentenciaEscribir()){
+                Write.OutText("SentenciaEscribir");
+            }
+            else if(actualStatement.isSentenciaLeer()){
+                Write.OutText("SentenciaLeer");
+            }
+            Write.OutText("Instruction "+ actualStatement.getIndexS()+
+                        ", nextS = "+actualStatement.getNextS()+", alternative = "+ actualStatement.getAlternativeS() );
+            i++;
+        }
+        Write.OutText("Ejecucion del programa");
+        i = 0;
+        while( i < statements.size()){  
+            actualStatement = (Statement) statements.get(i);
+            if(actualStatement.isSentenciaAsignacionSimple()){
+                SentenciaAsignacionSimple sas = (SentenciaAsignacionSimple)actualStatement.getStatement();                               
+                sas.execute();                
+                i = actualStatement.getNextS();
+            }
+            else if(actualStatement.isSentenciaAsignacionOperacion()){
+                SentenciaAsignacionOperacion sao = (SentenciaAsignacionOperacion)actualStatement.getStatement();                
+//                System.out.println("SentenciaAsignacionOperacion");
+//                System.out.println("Instruccion: " + i);        
                 sao.execute();
+                i = actualStatement.getNextS();
             }
             else if(actualStatement.isSentenciaCondicion()){                
                 SentenciaCondicion sc = (SentenciaCondicion)actualStatement.getStatement();
-                sc.posibleJumps(actualStatement.getNextS(),actualStatement.getAlternativeS());
+                sc.posibleJumps(actualStatement.getNextS(),actualStatement.getAlternativeS());                
+//                System.out.println("SentenciaAsignacionCondicion");
+//                System.out.println("Instruccion: " + i);        
                 sc.execute();
-                instruction = sc.next();
-                
+                i = sc.next();                
             }
             else if(actualStatement.isSentenciaEscribir()){
-                SentenciaEscribir se = (SentenciaEscribir)actualStatement.getStatement();
+                SentenciaEscribir se = (SentenciaEscribir)actualStatement.getStatement();                                
+                se.setText("Escribir: ");
+//                System.out.println("SentenciaEscribir");
+//                System.out.println("Instruccion: " + i);        
                 se.execute();
+                i = actualStatement.getNextS();
             }
             else if(actualStatement.isSentenciaLeer()){
-                SentenciaLeer sl = (SentenciaLeer)actualStatement.getStatement();
-                sl.execute();
-            }
-            i++;
-        }
+                SentenciaLeer sl = (SentenciaLeer)actualStatement.getStatement();                
+//                System.out.println("SentenciaLeer");
+//                System.out.println("Instruccion: " + i);        
+                sl.execute();                
+                i = actualStatement.getNextS();
+            }       
+        }                
     }
 }

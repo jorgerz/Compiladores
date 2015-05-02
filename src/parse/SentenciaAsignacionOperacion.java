@@ -5,6 +5,7 @@
  */
 package parse;
 
+import Main.Write;
 import Tokens.Variable;
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class SentenciaAsignacionOperacion {
     
     public void execute(){
         assignValue();
+        Write.OutText(destiny.getName()+" = "+destiny.getValue());
     }
         
     private void assignValue(){
@@ -44,6 +46,7 @@ public class SentenciaAsignacionOperacion {
         else if(vars.get(0) != null && vars.get(1) == null){            
             value1 = vars.get(0).getValue();
             value2 = floats.get(1);
+//            Write.OutText(vars.get(0).getName()+": "+value1+" float: "+value2);
         }
         else if(vars.get(0) == null && vars.get(1) != null){            
             value1 = floats.get(0);
@@ -70,6 +73,5 @@ public class SentenciaAsignacionOperacion {
             destiny.addValue( value1 % value2 );
         }        
         
-    }    
-        
+    }               
 }

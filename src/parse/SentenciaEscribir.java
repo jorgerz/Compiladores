@@ -25,10 +25,9 @@ public class SentenciaEscribir {
         this.text = text;
     }
     
-    public void execute(){
-        //Write.OutG(""+text+""+variable.getValue());
+    public void execute(){        
         if(variable.getValue() != -1.0f)
-            Write.OutText(""+text+""+variable.getValue());
+            Write.OutText(""+text+""+ variable.getName() +" = "+variable.getValue());
         else
             Write.OutText(""+text);
     }

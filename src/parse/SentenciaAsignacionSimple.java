@@ -5,6 +5,7 @@
  */
 package parse;
 
+import Main.Write;
 import Tokens.Variable;
 
 /**
@@ -31,6 +32,7 @@ public class SentenciaAsignacionSimple {
     
     public void execute(){
         assignValue();
+        Write.OutText(destiny.getName()+" = "+destiny.getValue());
     }
         
     public void assignValue(){

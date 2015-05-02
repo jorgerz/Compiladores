@@ -32,6 +32,10 @@ public class Statement {
         this.alternativeS = alternativeS;
     }
     
+    public void setNextS(int nextS){        
+        this.nextS = nextS;
+    }
+    
     public void addAlternativeS(int alternativeS){        
         this.alternativeS = alternativeS;
     }

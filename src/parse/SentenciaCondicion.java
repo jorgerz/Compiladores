@@ -5,6 +5,7 @@
  */
 package parse;
 
+import Main.Write;
 import Tokens.Variable;
 import java.util.ArrayList;
 
@@ -27,60 +28,18 @@ public class SentenciaCondicion {
     }
     
     public void execute(){                
-        setValues();
         
-        if(getType() == 2)
-            loopMientras();
-        else{
-            conditionSi();
-        }
+        setValues();
+        evaluateCondition();
     }
     
-    private void conditionSi(){
-        if(operator.equals("<")){
-            if(value1 < value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-        else if(operator.equals("<=")){
-            if(value1 <= value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-        else if(operator.equals(">")){
-            if(value1 > value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-        else if(operator.equals(">=")){
-            if(value1 >= value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-        else if(operator.equals("==")){
-            if(value1 == value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-        else if(operator.equals("!=")){
-            if(value1 != value2)
-                nextInstruction = nextS;
-            else
-                nextInstruction = alternativeS;
-        }
-    }
-    
-    private void loopMientras(){
+    private void evaluateCondition(){
+        Write.OutText("Condition: "+value1+" "+ operator+" "+value2);
         if(operator.equals("<")){            
             if(value1 < value2)
                 nextInstruction = nextS;
             else
-                nextInstruction = alternativeS;
+                nextInstruction = alternativeS;            
         }
         else if(operator.equals("<=")){
             if(value1 <= value2)

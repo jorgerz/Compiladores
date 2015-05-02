@@ -5,6 +5,7 @@
  */
 package parse;
 
+import Main.Write;
 import Tokens.Stack;
 import Tokens.Statement;
 import Tokens.TokenType;
@@ -50,8 +51,6 @@ public class ParseMetodos {
     }
     
     public boolean evaluarParser(){
-        //System.out.println("inicio "+tokens.get(contador).type.toString());
-        System.out.println("iniciar: "+tokens.get(contador).text);
         return programa();
     }
     
@@ -118,13 +117,22 @@ public class ParseMetodos {
             }else{
                 if(tokens.get(contador).type==tokenType.FIN){
                     int valueSiMientras = stackSiMientras.pop();
-                    int pointerInstruction = stackInstructions.pop();                    
-                    Statement condition = (Statement) statements.get(pointerInstruction);                        
-                    condition.addAlternativeS(instructionNumber);       
-                    SentenciaCondicion sc = (SentenciaCondicion)condition.getStatement();
-                    sc.setType(valueSiMientras);
-                    condition.setStatement(sc);
-                    statements.add(pointerInstruction, condition);
+                    int pointerInstruction = stackInstructions.pop();                              
+                    if(valueSiMientras == 2){
+                        Statement condition = (Statement) statements.get(pointerInstruction);                        
+                        condition.addAlternativeS(instructionNumber);                        
+                        statements.set(pointerInstruction, condition);
+                        
+                        Statement lastStatement = (Statement) statements.get(instructionNumber - 1);                                                
+                        lastStatement.setNextS(pointerInstruction);
+                        lastStatement.addAlternativeS(pointerInstruction);                        
+                        statements.set(instructionNumber - 1, lastStatement);                        
+                    }
+                    else{
+                        Statement condition = (Statement) statements.get(pointerInstruction);                        
+                        condition.addAlternativeS(instructionNumber);                        
+                        statements.set(pointerInstruction, condition);
+                    }                    
                     return true;
                 }
             }
@@ -153,7 +161,7 @@ public class ParseMetodos {
                         contador=temp;
                         return false;
                     }else{
-                        if(tokens.get(contador).type==tokenType.IDENTIFICADOR){
+                        if(tokens.get(contador-1).type==tokenType.IDENTIFICADOR){
                             posDestiny = varsTable.indexVariableName(tokens.get(contador-3).text);
                             posSource = varsTable.indexVariableName(tokens.get(contador-1).text);                           
                             statements.add( new Statement( instructionNumber, 
@@ -275,9 +283,9 @@ public class ParseMetodos {
                     contador++;
                     if(tokens.get(contador).type==tokenType.INICIO){
                         contador++;
-                        stackSiMientras.push(1);
-                        stackInstructions.push(instructionNumber-1);                            
-                        if(sentenciasBloque()){                            
+                        stackSiMientras.push(1);                        
+                        stackInstructions.push(instructionNumber++);                        
+                        if(sentenciasBloque()){
                             contador++;
                             return true;
                         }
@@ -312,10 +320,9 @@ public class ParseMetodos {
                                 vars.add( varsTable.getVariables().get(pos));
                                 floats.add( -1.0f);
                             }
-                            else{// if(tokens.get(i).type==tokenType.FLOTANTE){
+                            else{
                                 vars.add(null);
                                 floats.add(Float.parseFloat(tokens.get(i).text));
-                                //floats.add(Float.parseFloat("25"));
                             }
                         }
                         else{
@@ -324,10 +331,10 @@ public class ParseMetodos {
                         i++;
                         c++;
                     }
-                    statements.add( new Statement( instructionNumber, new SentenciaCondicion(vars,floats,operator), ++instructionNumber ));                    
+                    statements.add( new Statement( instructionNumber, 
+                            new SentenciaCondicion(vars,floats,operator), instructionNumber+1));                    
                     return true;
-                }    
-                    
+                }                        
             }
         }
         contador=temp;
@@ -344,8 +351,8 @@ public class ParseMetodos {
                 
                 if(tokens.get(contador).type==tokenType.INICIO){
                     contador++;
-                    stackSiMientras.push(2);
-                    stackInstructions.push(instructionNumber-1);
+                    stackSiMientras.push(2);                    
+                    stackInstructions.push(instructionNumber++);
                     if(sentenciasBloque()){                        
                         contador++;
                         return true;

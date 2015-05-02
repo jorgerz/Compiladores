@@ -6,6 +6,7 @@
 package parse;
 
 import Main.Read;
+import Main.Write;
 import Tokens.Variable;
 
 /**
@@ -28,5 +29,6 @@ public class SentenciaLeer {
     
     public void execute(){
         variable.addValue( Read.inFloat(text) );
+        Write.OutText("Leido "+variable.getName()+" = "+variable.getValue());
     }
 }

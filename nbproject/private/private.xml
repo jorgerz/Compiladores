@@ -3,15 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/parse/SentenciaCondicion.java</file>
             <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Main/Lexer.java</file>
             <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Tokens/Statement.java</file>
-            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Main/Read.java</file>
-            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Main/ApplicationLexer.java</file>
-            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/parse/SentenciaEscribir.java</file>
             <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/parse/ParseMetodos.java</file>
-            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/parse/SentenciaLeer.java</file>
             <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Tokens/ListStatement.java</file>
-            <file>file:/D:/Programming/Java/Compiladores/Compiladores/src/Main/Write.java</file>
         </group>
     </open-files>
 </project-private>
