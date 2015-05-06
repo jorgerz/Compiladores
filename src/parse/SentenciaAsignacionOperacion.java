@@ -21,6 +21,7 @@ public class SentenciaAsignacionOperacion {
     private ArrayList<Float> floats;
     private Variable destiny;
     private boolean flag;
+    private String textoEjecucion="";
     
     public SentenciaAsignacionOperacion(Variable destiny, ArrayList<Variable> vars, ArrayList<Float> floats, ArrayList<String> operators){
         this.vars = vars;
@@ -33,6 +34,7 @@ public class SentenciaAsignacionOperacion {
     public void execute(){
         assignValue();
         Write.OutText(destiny.getName()+" = "+destiny.getValue());
+        textoEjecucion+=destiny.getName()+" = "+destiny.getValue()+"\n\n";
     }
         
     private void assignValue(){
@@ -73,5 +75,9 @@ public class SentenciaAsignacionOperacion {
             destiny.addValue( value1 % value2 );
         }        
         
-    }               
+    }
+    public String textEjecucion()
+    {
+        return textoEjecucion;
+    }
 }

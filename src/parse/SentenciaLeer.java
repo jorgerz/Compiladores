@@ -19,6 +19,7 @@ public class SentenciaLeer {
     private String strValue;
     private float value;
     private String text;
+    private String textoEjecucion="";
     public SentenciaLeer(Variable variable){
         this.variable = variable;
     }
@@ -30,5 +31,11 @@ public class SentenciaLeer {
     public void execute(){
         variable.addValue( Read.inFloat(text) );
         Write.OutText("Leido "+variable.getName()+" = "+variable.getValue());
+        textoEjecucion+="Leido "+variable.getName()+" = "+variable.getValue()+"\n\n";
+    }
+    
+    public String textEjecucion()
+    {
+        return textoEjecucion;
     }
 }

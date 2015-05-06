@@ -21,6 +21,7 @@ public class SentenciaCondicion {
     private float value1 = 0.0f, value2 = 0.0f;
     private int type,c;
     private int nextInstruction, nextS, alternativeS;    
+    private String textoEjecucion="";
     public SentenciaCondicion(ArrayList<Variable> vars, ArrayList<Float> floats, String operator){
         this.vars = vars;        
         this.floats = floats;
@@ -35,6 +36,8 @@ public class SentenciaCondicion {
     
     private void evaluateCondition(){
         Write.OutText("Condition: "+value1+" "+ operator+" "+value2);
+        textoEjecucion+="Condicion: "+value1+" "+ operator+" "+value2+"\n\n";
+        
         if(operator.equals("<")){            
             if(value1 < value2)
                 nextInstruction = nextS;
@@ -112,5 +115,10 @@ public class SentenciaCondicion {
     public void posibleJumps(int nextS, int alternativeS) {
         this.nextS = nextS;
         this.alternativeS = alternativeS;
+    }
+    
+    public String textEjecucion()
+    {
+        return textoEjecucion;
     }
 }

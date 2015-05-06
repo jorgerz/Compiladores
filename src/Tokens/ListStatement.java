@@ -7,6 +7,7 @@ package Tokens;
 
 import Main.Write;
 import java.util.ArrayList;
+import javax.swing.JTextArea;
 import parse.*;
 
 /**
@@ -16,6 +17,8 @@ import parse.*;
 public class ListStatement {
 
     ArrayList<Object> statements;
+    private JTextArea textAreaTokens;
+    String mensajesEjecucion="";
     public ListStatement(ArrayList<Object> statements){
         this.statements = statements;
     }
@@ -25,43 +28,57 @@ public class ListStatement {
         int instruction = 0;
         Statement actualStatement;
         boolean startLoop = false;
+       
         System.out.println("Tamano del programa: "+statements.size());
         Write.OutText("Sentencias del programa");
+        mensajesEjecucion+="Sentencias del programa"+"\n\n";
+        
         while( i < statements.size()){  
             actualStatement = (Statement) statements.get(i);
             if(actualStatement.isSentenciaAsignacionSimple()){             
                 Write.OutText("SentenciaAsignacionSimple");
+                 mensajesEjecucion+="SentenciaAsignacionSimple"+"\n";
             }
             else if(actualStatement.isSentenciaAsignacionOperacion()){
                 Write.OutText("SentenciaAsignacionOperacion");
+                mensajesEjecucion+="SentenciaAsignacionOperacion"+"\n";
             }
             else if(actualStatement.isSentenciaCondicion()){          
                 Write.OutText("SentenciaCondicion");
+                mensajesEjecucion+="SentenciaCondicion"+"\n";
             }            
             else if(actualStatement.isSentenciaEscribir()){
                 Write.OutText("SentenciaEscribir");
+                mensajesEjecucion+="SentenciaEscribir"+"\n";
+                
             }
             else if(actualStatement.isSentenciaLeer()){
                 Write.OutText("SentenciaLeer");
+                mensajesEjecucion+="SentenciaLeer"+"\n";
             }
             Write.OutText("Instruction "+ actualStatement.getIndexS()+
                         ", nextS = "+actualStatement.getNextS()+", alternative = "+ actualStatement.getAlternativeS() );
+            mensajesEjecucion+="Instruction "+ actualStatement.getIndexS()+
+                        ", nextS = "+actualStatement.getNextS()+", alternative = "+ actualStatement.getAlternativeS()+"\n\n";
             i++;
         }
+        textAreaTokens.setText(mensajesEjecucion);
         Write.OutText("Ejecucion del programa");
+        mensajesEjecucion+="\nEjecucion del programa"+"\n\n";
         i = 0;
         while( i < statements.size()){  
             actualStatement = (Statement) statements.get(i);
             if(actualStatement.isSentenciaAsignacionSimple()){
                 SentenciaAsignacionSimple sas = (SentenciaAsignacionSimple)actualStatement.getStatement();                               
-                sas.execute();                
+                sas.execute();     
+                mensajesEjecucion+=sas.textEjecucion();
                 i = actualStatement.getNextS();
+                
             }
             else if(actualStatement.isSentenciaAsignacionOperacion()){
-                SentenciaAsignacionOperacion sao = (SentenciaAsignacionOperacion)actualStatement.getStatement();                
-//                System.out.println("SentenciaAsignacionOperacion");
-//                System.out.println("Instruccion: " + i);        
+                SentenciaAsignacionOperacion sao = (SentenciaAsignacionOperacion)actualStatement.getStatement();                       
                 sao.execute();
+                mensajesEjecucion+=sao.textEjecucion();
                 i = actualStatement.getNextS();
             }
             else if(actualStatement.isSentenciaCondicion()){                
@@ -70,7 +87,9 @@ public class ListStatement {
 //                System.out.println("SentenciaAsignacionCondicion");
 //                System.out.println("Instruccion: " + i);        
                 sc.execute();
-                i = sc.next();                
+                mensajesEjecucion+=sc.textEjecucion();
+                i = sc.next();
+               
             }
             else if(actualStatement.isSentenciaEscribir()){
                 SentenciaEscribir se = (SentenciaEscribir)actualStatement.getStatement();                                
@@ -78,15 +97,23 @@ public class ListStatement {
 //                System.out.println("SentenciaEscribir");
 //                System.out.println("Instruccion: " + i);        
                 se.execute();
+                mensajesEjecucion+=se.textEjecucion();
                 i = actualStatement.getNextS();
             }
             else if(actualStatement.isSentenciaLeer()){
                 SentenciaLeer sl = (SentenciaLeer)actualStatement.getStatement();                
 //                System.out.println("SentenciaLeer");
 //                System.out.println("Instruccion: " + i);        
-                sl.execute();                
+                sl.execute();
+                mensajesEjecucion+=sl.textEjecucion();
                 i = actualStatement.getNextS();
-            }       
+            }
+            textAreaTokens.setText(mensajesEjecucion);
         }                
+    }
+
+    public void showEjecucion(JTextArea textAreaTokens) {
+        this.textAreaTokens=textAreaTokens;
+        
     }
 }

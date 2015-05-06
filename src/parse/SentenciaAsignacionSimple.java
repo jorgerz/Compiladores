@@ -17,6 +17,7 @@ public class SentenciaAsignacionSimple {
     private Variable source;
     private Variable destiny;
     private boolean flag;
+    private String textoEjecucion="";
     
     public SentenciaAsignacionSimple(Variable destiny, Variable source){
         this.source = source;
@@ -33,6 +34,7 @@ public class SentenciaAsignacionSimple {
     public void execute(){
         assignValue();
         Write.OutText(destiny.getName()+" = "+destiny.getValue());
+        textoEjecucion+=destiny.getName()+" = "+destiny.getValue()+"\n\n";
     }
         
     public void assignValue(){
@@ -48,5 +50,10 @@ public class SentenciaAsignacionSimple {
     
     private void assignFloatValue(){
         destiny.addValue(variable);
+    }
+    
+    public String textEjecucion()
+    {
+        return textoEjecucion;
     }
 }

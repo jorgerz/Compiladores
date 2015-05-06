@@ -16,6 +16,7 @@ public class SentenciaEscribir {
     private String strValue;
     private float value;
     private String text;
+    private String textoEjecucion="";
     public SentenciaEscribir(Variable variable){
         this.variable = variable;
         text = "";
@@ -26,9 +27,18 @@ public class SentenciaEscribir {
     }
     
     public void execute(){        
-        if(variable.getValue() != -1.0f)
+        if(variable.getValue() != -1.0f){
             Write.OutText(""+text+""+ variable.getName() +" = "+variable.getValue());
-        else
+            textoEjecucion+=""+text+""+ variable.getName() +" = "+variable.getValue()+"\n\n";
+        }
+        else{
             Write.OutText(""+text);
+            textoEjecucion+=""+text+"\n\n";
+        }
+    }
+    
+    public String textEjecucion()
+    {
+        return textoEjecucion;
     }
 }
