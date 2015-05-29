@@ -1,7 +1,26 @@
 Inicio-de-programa
-Mientras I < prom
+Leer N
+Escribir N
+prom = 0.0
+I = 0.0
+Mientras I < N
 Inicio
+Leer calificacion
 prom = prom + calificacion
-Escribir calificacion
+I = I + 1.0
+Fin
+prom = prom / N
+reprobado = 5.0
+Si prom < 6.0 Entonces
+Inicio
+Escribir reprobado
+Fin
+Sino
+Inicio
+Fin
+Repite 5.0 Veces
+Si prom >= 6.0 Entonces
+Inicio
+Escribir prom
 Fin
 Fin-de-programa

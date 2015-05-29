@@ -9,6 +9,7 @@ package Main;
  *
  * @author Jorge
  */
+import Tokens.TablaVariables;
 import java.awt.List;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class Lexer{
     ArrayList<String> datos= new ArrayList();
     String datos1="";
     private String[][] src;
-    private ReadFile file;
+    //private ReadFile file;
     private String  iden="IDENTIFICADOR";
     private Almacenar almacena;
     ArrayList<Token> tokenList = new ArrayList();    
@@ -36,6 +37,7 @@ public class Lexer{
     private boolean flag = false;
     private Hashtable<String,TablaVariables> variables = new  Hashtable<String, TablaVariables>();
     private String info;
+    private JTextArea textAreaCodigo;
 	
 	
     public Lexer(String[] source){
@@ -47,16 +49,11 @@ public class Lexer{
     }
 
     public void initLexer(){		
-//		tokenList=(ArrayList<Token>) token.tokenize(source);
-            String[] contentLines = getContentTextFile().split("\n");
-            tokenList=(ArrayList<Token>) token.tokenize(src,contentLines);
-            parse = new ParseMetodos(tokenList);
-            showTokens();
-            //showParse();
-           
+        String[] contentLines = textAreaCodigo.getText().split("\n");
+        tokenList=(ArrayList<Token>) token.tokenize(src,contentLines);;          
     }
 
-    private void showTokens() {
+    public void showTokens(JTextArea textAreaTokens) {
         int j=0;
         for(int i=0; i<tokenList.size(); i++){
             textAreaTokens.append(i+"	Token: "+tokenList.get(i).getText()+ "		Tipo: "+tokenList.get(i).getToken()+"\n");
@@ -73,21 +70,12 @@ public class Lexer{
         return tokenList;
     }
     
-    public String getContentTextFile(){
-        return file.getContentTextFile();
-    }
-
 
     public String guardar(){
         datos1="";
         for(int i=0; i<datos.size(); i++)
             datos1+=datos.get(i);
         return datos1;
-    }
-
-    public void fileUsed(ReadFile file, JTextArea textAreaTokens){
-        this.file = file;
-        this.textAreaTokens=textAreaTokens;
     }
 
     public void showParse(JLabel resultado) {
@@ -98,5 +86,9 @@ public class Lexer{
             resultado.setText("Error en el programa");
         }
     }
+
+    void fileUsed(JTextArea textAreaCodigo, JTextArea textAreaTokens) {
+        this.textAreaTokens=textAreaTokens;
+        this.textAreaCodigo=textAreaCodigo;
+    }
 }
- 

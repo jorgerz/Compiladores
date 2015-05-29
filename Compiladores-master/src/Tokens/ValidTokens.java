@@ -16,7 +16,7 @@ public interface ValidTokens {
 	 * igual a dos carácteres, sin importar el tipo de token que sean
 	 * */
 	String[] stringTokens = {
-			"Inicio-de-programa", "Fin-de-programa", "Leer", "Escribir", "Si", 
+			"Inicio-de-programa", "Fin-de-programa", "Leer", "Escribir", "Si", "Sino", "Repite","Veces", 
 			"Entonces", "Mientras", "Inicio", "Fin","Identificador", ">=", "<=", "==", "!="
 	};	
 	/*
@@ -32,7 +32,8 @@ public interface ValidTokens {
 	 * */
 	TokenType[][] tokenType = { {
 			TokenType.INICIO_PROGRAMA, TokenType.FIN_PROGRAMA, TokenType.LEER,
-			TokenType.ESCRIBIR, TokenType.SI, TokenType.ENTONCES, TokenType.MIENTRAS,
+			TokenType.ESCRIBIR, TokenType.SI, TokenType.SINO, TokenType.REPITE, 
+                        TokenType.VECES, TokenType.ENTONCES, TokenType.MIENTRAS,
 			TokenType.INICIO, TokenType.FIN, TokenType.OPERADOR_RELACIONAL, 
 			TokenType.OPERADOR_RELACIONAL, TokenType.OPERADOR_RELACIONAL, 
 			TokenType.OPERADOR_RELACIONAL

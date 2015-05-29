@@ -35,4 +35,8 @@ public class Variable {
     public void addValue(float value){
         this.value = value;
     }
+    
+    public float getValue(){
+        return value;
+    }
 }

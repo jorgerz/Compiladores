@@ -1,0 +1,7 @@
+Inicio-de-programa
+Mientras I < prom
+Inicio
+prom = prom + calificacion
+Escribir calificacion
+Fin
+Fin-de-programa

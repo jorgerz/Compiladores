@@ -4,19 +4,43 @@
  * and open the template in the editor.
  */
 package Main;
+import Tokens.TablaVariables;
 import FilesManagement.ReadFile;
 import FilesManagement.WriteFile;
+import Tokens.ListStatement;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import parse.ParseMetodos;
 /**
  *
  * @author Jorge
  */
 public class ApplicationLexer extends javax.swing.JFrame {
+    
     ReadFile archivo;
     WriteFile archivo2;
     Lexer lex;
+    ParseMetodos parser;
+    ListStatement statements;
+    TablaVariables varsTable;
+    private String text;
+    
     /**
      * Creates new form ApplicationLexer
      */
+    JFileChooser fileChooser;
+    File file;
+    
+    
     public ApplicationLexer() {
         initComponents();
     }
@@ -30,6 +54,7 @@ public class ApplicationLexer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem2 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TextAreaCodigo = new javax.swing.JTextArea();
@@ -39,10 +64,21 @@ public class ApplicationLexer extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         resultado = new javax.swing.JLabel();
         parse = new javax.swing.JButton();
+        interpreter = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         abrir = new javax.swing.JMenu();
-        guardar = new javax.swing.JMenu();
-        identificador = new javax.swing.JMenu();
+        Abrir = new javax.swing.JMenuItem();
+        Guardar = new javax.swing.JMenuItem();
+        Salir = new javax.swing.JMenuItem();
+        Editar = new javax.swing.JMenu();
+        Cortar = new javax.swing.JMenuItem();
+        Copiar = new javax.swing.JMenuItem();
+        Pegar = new javax.swing.JMenuItem();
+        Identificadores = new javax.swing.JMenu();
+        tablaTokens = new javax.swing.JMenuItem();
+        tablaIdentificadores = new javax.swing.JMenuItem();
+
+        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,6 +90,11 @@ public class ApplicationLexer extends javax.swing.JFrame {
         tokenize.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tokenizeMouseClicked(evt);
+            }
+        });
+        tokenize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tokenizeActionPerformed(evt);
             }
         });
 
@@ -72,23 +113,38 @@ public class ApplicationLexer extends javax.swing.JFrame {
             }
         });
 
+        interpreter.setText("Interpreter");
+        interpreter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                interpreterMouseClicked(evt);
+            }
+        });
+        interpreter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                interpreterActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tokenize)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(parse)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(resultado, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(tokenize)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(parse)
+                            .addGap(18, 18, 18)
+                            .addComponent(interpreter)
+                            .addGap(27, 27, 27)
+                            .addComponent(jLabel1)
+                            .addGap(18, 18, 18)
+                            .addComponent(resultado, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -101,35 +157,98 @@ public class ApplicationLexer extends javax.swing.JFrame {
                     .addComponent(tokenize)
                     .addComponent(jLabel1)
                     .addComponent(resultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(interpreter)
                     .addComponent(parse))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(47, 47, 47))
         );
 
-        abrir.setText("Abrir");
-        abrir.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                abrirMouseClicked(evt);
+        abrir.setText("Archivo");
+
+        Abrir.setText("Abrir");
+        Abrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AbrirActionPerformed(evt);
             }
         });
+        abrir.add(Abrir);
+
+        Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+        abrir.add(Guardar);
+
+        Salir.setText("Salir");
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
+        abrir.add(Salir);
+
         jMenuBar1.add(abrir);
 
-        guardar.setText("Guardar");
-        guardar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                guardarMouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(guardar);
+        Editar.setText("Editar");
 
-        identificador.setText("Tabla de identificadores");
-        identificador.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                identificadorMouseClicked(evt);
+        Cortar.setText("Cortar");
+        Cortar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CortarActionPerformed(evt);
             }
         });
-        jMenuBar1.add(identificador);
+        Editar.add(Cortar);
+
+        Copiar.setText("Copiar");
+        Copiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CopiarActionPerformed(evt);
+            }
+        });
+        Editar.add(Copiar);
+
+        Pegar.setText("Pegar");
+        Pegar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PegarActionPerformed(evt);
+            }
+        });
+        Editar.add(Pegar);
+
+        jMenuBar1.add(Editar);
+
+        Identificadores.setText("GenerarTablas");
+        Identificadores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IdentificadoresMouseClicked(evt);
+            }
+        });
+        Identificadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IdentificadoresActionPerformed(evt);
+            }
+        });
+
+        tablaTokens.setText("Generar Tabla Tokens");
+        tablaTokens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tablaTokensActionPerformed(evt);
+            }
+        });
+        Identificadores.add(tablaTokens);
+
+        tablaIdentificadores.setText("Generar Tabla Identificadores");
+        tablaIdentificadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tablaIdentificadoresActionPerformed(evt);
+            }
+        });
+        Identificadores.add(tablaIdentificadores);
+
+        jMenuBar1.add(Identificadores);
 
         setJMenuBar(jMenuBar1);
 
@@ -147,46 +266,160 @@ public class ApplicationLexer extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void abrirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_abrirMouseClicked
-        archivo = new ReadFile("Archivos/prueba.txt");
-        archivo.readFile();
-        TextAreaCodigo.append("");
-        TextAreaCodigo.append(archivo.getContentTextFile());
-    }//GEN-LAST:event_abrirMouseClicked
-
-    private void guardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guardarMouseClicked
-        // TODO add your handling code here:
-        archivo2= new WriteFile("Archivos/tokens.txt");
-        archivo2.saveFile(textAreaTokens.getText());
-        archivo2.closeFile();
-    }//GEN-LAST:event_guardarMouseClicked
-
     private void tokenizeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tokenizeMouseClicked
-        String[] content = archivo.getContentTextFile().split("\n");
-        String[][] source = new String[content.length][];
-        for(int i = 0; i < content.length; i++){
-                source[i] = content[i].split(" ");							
-        }
-        textAreaTokens.append("");
-        lex = new Lexer(source);
-        lex.fileUsed(archivo,textAreaTokens);
-        lex.initLexer();
-        TablaVariables tablaVar = new TablaVariables(lex.getTokens());
-        textAreaTokens.setEditable(false);
+
+      
     }//GEN-LAST:event_tokenizeMouseClicked
 
-    private void identificadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_identificadorMouseClicked
+    private void IdentificadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IdentificadoresMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_IdentificadoresMouseClicked
+
+    private void parseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parseMouseClicked
+        // TODO add your handling code here:
+        //lex.showParse(resultado);
+        parser = new ParseMetodos(lex.getTokens(), varsTable);
+        parser.showResults(resultado);
+    }//GEN-LAST:event_parseMouseClicked
+
+    private void interpreterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interpreterActionPerformed
+
+    }//GEN-LAST:event_interpreterActionPerformed
+
+    private void interpreterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_interpreterMouseClicked
+
+        statements = new ListStatement( parser.getAllStatements() );
+        statements.showEjecucion(textAreaTokens);
+        statements.executeProgram();
+        
+    }//GEN-LAST:event_interpreterMouseClicked
+
+    private void AbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result= fileChooser.showOpenDialog(this);
+        if (result== JFileChooser.CANCEL_OPTION) return;
+        File name= fileChooser.getSelectedFile();
+        if(name.exists()) {
+            if (name.isFile()) {
+                try {
+                    //System.out.println("direccion"+name.getAbsolutePath());
+                    System.out.println("direccion"+name.getPath());
+                    archivo = new ReadFile(name.getPath());
+                    archivo.readFile();
+                    BufferedReader input= new BufferedReader(new FileReader (name));
+                    StringBuffer buffer= new StringBuffer();
+                    String text;
+                    TextAreaCodigo.setText("");
+                    while ((text=input.readLine()) !=null)
+                            buffer.append(text+ "\n");
+                    TextAreaCodigo.append(buffer.toString());
+                }
+                catch (IOException ioException) {
+                        JOptionPane.showMessageDialog(null,"Error en el archivo", "Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else if (name.isDirectory ()) {
+                String directory[] = name.list();
+                TextAreaCodigo.append("\n\nContenido del directorio:\n");
+                for (int i=0;i<directory.length; i++)
+                        TextAreaCodigo.append(directory [i]+"\n");
+            }
+            else {
+               JOptionPane.showMessageDialog(null," No existe "," Error ",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_AbrirActionPerformed
+
+    private void tokenizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tokenizeActionPerformed
+        // TODO add your handling code here:
+       
+        String [] content = TextAreaCodigo.getText().split("\n");
+        String[][] source = new String[content.length][];
+        for(int i = 0; i < content.length; i++){
+            source[i] = content[i].split(" ");							
+        }
+        textAreaTokens.setText("");
+        lex = new Lexer(source);
+        lex.fileUsed(TextAreaCodigo,textAreaTokens);
+        lex.initLexer();
+        varsTable = new TablaVariables(lex.getTokens());
+        textAreaTokens.setEditable(false);
+        lex.showTokens(textAreaTokens);
+    }//GEN-LAST:event_tokenizeActionPerformed
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        guardar();
+    }//GEN-LAST:event_GuardarActionPerformed
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        String d=JOptionPane.showInputDialog("Desea salir y guardar el archivo S/N");
+        if (d.equals("s")) {
+                guardar();
+                System.exit(0);
+        }
+        else if(d.equals("n")) {
+                System.exit(0);
+        }
+        else {
+                JOptionPane.showMessageDialog(null,"Caracter invalido");
+        }
+    }//GEN-LAST:event_SalirActionPerformed
+
+    private void PegarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PegarActionPerformed
+        // TODO add your handling code here:
+        TextAreaCodigo.paste();
+    }//GEN-LAST:event_PegarActionPerformed
+
+    private void CortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CortarActionPerformed
+        // TODO add your handling code here:
+        TextAreaCodigo.cut();
+    }//GEN-LAST:event_CortarActionPerformed
+
+    private void CopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CopiarActionPerformed
+        // TODO add your handling code here:
+        TextAreaCodigo.copy();
+    }//GEN-LAST:event_CopiarActionPerformed
+
+    private void IdentificadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IdentificadoresActionPerformed
         // TODO add your handling code here:
         archivo2= new WriteFile("Archivos/identificadores.txt");
         archivo2.saveFile(lex.guardar());
         archivo2.closeFile();
-    }//GEN-LAST:event_identificadorMouseClicked
+    }//GEN-LAST:event_IdentificadoresActionPerformed
 
-    private void parseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parseMouseClicked
+    private void tablaTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tablaTokensActionPerformed
         // TODO add your handling code here:
-        lex.showParse(resultado);
-    }//GEN-LAST:event_parseMouseClicked
+        archivo2 = new WriteFile("Archivos/tokens.txt");
+        archivo2.saveFile(textAreaTokens.getText());
+        archivo2.closeFile();
+    }//GEN-LAST:event_tablaTokensActionPerformed
 
+    private void tablaIdentificadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tablaIdentificadoresActionPerformed
+        // TODO add your handling code here:
+        archivo2= new WriteFile("Archivos/identificadores.txt");
+        archivo2.saveFile(lex.guardar());
+        archivo2.closeFile();
+    }//GEN-LAST:event_tablaIdentificadoresActionPerformed
+    
+    public void guardar(){
+        JOptionPane.showMessageDialog(null,"¡Por favor no olvide colocar la extension del archivo (*.txt)!");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result= fileChooser.showSaveDialog(this);
+        if (result== JFileChooser.CANCEL_OPTION) return;
+            File name= fileChooser.getSelectedFile();
+            try {
+                PrintWriter output= new PrintWriter(new FileWriter( name));
+                output.write(TextAreaCodigo.getText());
+                output.close();
+            }
+            catch (IOException ioException) {
+                JOptionPane.showMessageDialog(null,"Error en el archivo","Error",JOptionPane.ERROR_MESSAGE);
+            }
+    }
+            
     /**
      * @param args the command line arguments
      */
@@ -223,17 +456,27 @@ public class ApplicationLexer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Abrir;
+    private javax.swing.JMenuItem Copiar;
+    private javax.swing.JMenuItem Cortar;
+    private javax.swing.JMenu Editar;
+    private javax.swing.JMenuItem Guardar;
+    private javax.swing.JMenu Identificadores;
+    private javax.swing.JMenuItem Pegar;
+    private javax.swing.JMenuItem Salir;
     private javax.swing.JTextArea TextAreaCodigo;
     private javax.swing.JMenu abrir;
-    private javax.swing.JMenu guardar;
-    private javax.swing.JMenu identificador;
+    private javax.swing.JButton interpreter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton parse;
     private javax.swing.JLabel resultado;
+    private javax.swing.JMenuItem tablaIdentificadores;
+    private javax.swing.JMenuItem tablaTokens;
     private javax.swing.JTextArea textAreaTokens;
     private javax.swing.JButton tokenize;
     // End of variables declaration//GEN-END:variables

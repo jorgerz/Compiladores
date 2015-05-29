@@ -128,6 +128,20 @@ public class ParseMetodos {
                         lastStatement.addAlternativeS(pointerInstruction);                        
                         statements.set(instructionNumber - 1, lastStatement);                        
                     }
+                    else if(valueSiMientras==3){
+                        Statement condition = (Statement) statements.get(pointerInstruction);                        
+                        condition.addAlternativeS(instructionNumber);                        
+                        statements.set(pointerInstruction, condition);
+                        
+                        Statement lastStatement = (Statement) statements.get(instructionNumber - 1);                                                
+                        lastStatement.setNextS(pointerInstruction);
+                        lastStatement.addAlternativeS(pointerInstruction);                        
+                        statements.set(instructionNumber - 1, lastStatement);  
+                    }
+                    
+                    else if(valueSiMientras==4){
+                        
+                    }
                     else{
                         Statement condition = (Statement) statements.get(pointerInstruction);                        
                         condition.addAlternativeS(instructionNumber);                        
@@ -143,7 +157,7 @@ public class ParseMetodos {
 
     
     private boolean sentencia(){
-        return sentenciaAsignacionSimple() || sentenciaAsignacionOperacion() || senteciaLeer() || sentenciaEscribir()|| sentenciaSi() || sentenciaMientras();
+        return sentenciaAsignacionSimple() || sentenciaAsignacionOperacion() || senteciaLeer() || sentenciaEscribir()|| sentenciaSi() || sentenciaMientras() || sentenciaRepite();
     }
     
     private boolean sentenciaAsignacionSimple(){
@@ -174,7 +188,7 @@ public class ParseMetodos {
                             statements.add( new Statement( instructionNumber, 
                                     new SentenciaAsignacionSimple( varsTable.getVariables().get(posDestiny), 
                                             Float.parseFloat(tokens.get(contador-1).text) ), 
-                                    instructionNumber+1, ++instructionNumber ) );
+                                    instructionNumber+1, ++instructionNumber ));
                         }
                         return true;
                     }
@@ -287,7 +301,12 @@ public class ParseMetodos {
                         stackInstructions.push(instructionNumber++);                        
                         if(sentenciasBloque()){
                             contador++;
-                            return true;
+                            if(sentenciaSino()){
+                                return true;
+                            }
+                            else{
+                                return true;
+                            }
                         }
                     }
                     else if(sentencias()){
@@ -298,6 +317,28 @@ public class ParseMetodos {
         }
         contador=temp;
         return false;
+    }
+    
+    private boolean sentenciaSino(){
+       int temp=contador;
+       
+       if(tokens.get(contador).type==tokenType.SINO){
+            contador++;
+            if(tokens.get(contador).type==tokenType.INICIO){
+                contador++;
+                stackSiMientras.push(4);                        
+                stackInstructions.push(instructionNumber++);
+                if(sentenciasBloque()){
+                    contador++;
+                    return true;
+                }
+            }
+            else if(sentencias()){
+                return true;
+            }
+       }
+       contador=temp;
+       return false;
     }
     
     private boolean condicion(){
@@ -317,7 +358,7 @@ public class ParseMetodos {
                         if(c!=1){                            
                             if(tokens.get(i).type==tokenType.IDENTIFICADOR){
                                 pos = varsTable.indexVariableName(tokens.get(i).text);
-                                vars.add( varsTable.getVariables().get(pos));
+                                vars.add(varsTable.getVariables().get(pos));
                                 floats.add( -1.0f);
                             }
                             else{
@@ -367,7 +408,53 @@ public class ParseMetodos {
         return false;
     }
     
+    private boolean sentenciaRepite(){
+        int temp = contador;
+        
+        if(tokens.get(contador).type==tokenType.REPITE){
+            contador++;
+            if(tokens.get(contador).type==tokenType.IDENTIFICADOR || tokens.get(contador).type==tokenType.FLOTANTE){
+                contador++;
+                codicionRepite();
+                if(tokens.get(contador).type==tokenType.VECES){
+                    contador++;
+                    stackSiMientras.push(3);                    
+                    stackInstructions.push(instructionNumber++);
+                    if(sentenciasBloque()){                        
+                        contador++;
+                        return true;
+                    }
+                }
+                if(sentencias()){
+                    return true;
+                }                
+            }     
+        }
+        contador= temp;
+        return false;
+    }
+    
     public ArrayList<Object> getAllStatements(){
         return statements;
+    }
+
+    private void codicionRepite() {
+        int c = 0, i=0, pos; 
+        ArrayList<Variable> vars = new ArrayList<Variable>();
+        ArrayList<Float> floats = new ArrayList<Float>();
+        
+        if(tokens.get(i).type==tokenType.IDENTIFICADOR){
+            pos = varsTable.indexVariableName(tokens.get(i).text);
+            vars.add(varsTable.getVariables().get(pos));
+            floats.add( -1.0f);
+        }
+        else{
+            vars.add(null);
+            floats.add(Float.parseFloat(tokens.get(i).text));
+        }
+        
+        statements.add( new Statement( instructionNumber, 
+                            new SentenciaRepite(vars,floats), instructionNumber+1));                    
+                    
     }
 }
