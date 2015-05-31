@@ -13,18 +13,19 @@ import java.util.ArrayList;
  * @author Jorge
  */
 public class SentenciaRepite {
-    private final ArrayList<Variable> vars;
-    private final ArrayList<Float> floats;
+    private Variable variable;
+    private float _float;
     private float value1 = 0.0f, value2 = 0.0f;
     private int type,c;
     private int nextInstruction, nextS, alternativeS;    
     private String textoEjecucion="";
+    private static float counter;
     
-    SentenciaRepite(ArrayList<Variable> vars, ArrayList<Float> floats) {
-        this.vars=vars;
-        this.floats=floats;
-    }
-    
+    public SentenciaRepite(Variable variable, Float _float) {
+        this.variable = variable;
+        this._float = _float;
+        counter = 0.0f;
+    }        
     
     public int next(){
         return nextInstruction;
@@ -40,14 +41,32 @@ public class SentenciaRepite {
     
     private void setValues(){
         
-        if(vars.get(0) == null){      
-            c=0;
-            value1 = floats.get(0);
+    }
+    
+    public void execute(){
+        
+        if(_float != -1.0f){            
+            if(counter <_float){                
+                textoEjecucion = "Repetido: "+counter+" veces\n";
+                counter++;
+                nextInstruction = nextS;
+            }
+            else if(counter == _float){
+                textoEjecucion = "";
+                nextInstruction = alternativeS;
+                counter = 0;
+            }
         }
-        else if(vars.get(0) != null){            
-            c=1;
-            value1 = vars.get(0).getValue();
-        }
+        else{
+            if(counter < variable.getValue()){
+                counter++;
+                nextInstruction = nextS;
+            }
+            else if(counter == variable.getValue()){
+                nextInstruction = alternativeS;
+                counter = 0;
+            }
+        }                
     }
 
     public void posibleJumps(int nextS, int alternativeS) {

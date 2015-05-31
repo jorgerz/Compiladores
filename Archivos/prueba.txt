@@ -12,11 +12,10 @@ Fin
 prom = prom / N
 reprobado = 5.0
 Si prom < 6.0 Entonces
-Sino
 Inicio
 Escribir reprobado
 Fin
-Si prom >= 6.0 Entonces
+Sino
 Inicio
 Escribir prom
 Fin

@@ -28,10 +28,14 @@ public class SentenciaLeer {
         this.text = text;
     }
     
-    public void execute(){
+    public void execute(){        
         variable.addValue( Read.inFloat(text) );
         Write.OutText("Leido "+variable.getName()+" = "+variable.getValue());
         textoEjecucion+="Leido "+variable.getName()+" = "+variable.getValue()+"\n\n";
+    }
+    
+    public Variable getVariable(){
+        return variable;
     }
     
     public String textEjecucion()

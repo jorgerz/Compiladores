@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package parse;
 
 import Main.Write;
@@ -19,6 +14,12 @@ import Tokens.Variable;
  *
  * @author Jorge
  */
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 public class ParseMetodos {
     private ArrayList<Token> tokens;
     private ArrayList<Object> statements;
@@ -28,8 +29,10 @@ public class ParseMetodos {
     private TablaVariables varsTable;
     private Stack stackSiMientras;
     private Stack stackInstructions;
+    private Stack otherStack;
     private int checkSiMientras;
     private int instructionNumber;
+    private int aux;
 
     public ParseMetodos(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -46,6 +49,7 @@ public class ParseMetodos {
         statements = new ArrayList<Object>();
         stackSiMientras = new Stack();
         stackInstructions = new Stack();
+        otherStack = new Stack();
         checkSiMientras = 0;
         instructionNumber = 0;
     }
@@ -107,6 +111,7 @@ public class ParseMetodos {
                 }
             }
         }
+        System.out.println("contador en: "+contador);
         return false;
     }
     
@@ -116,9 +121,14 @@ public class ParseMetodos {
                     return true;
             }else{
                 if(tokens.get(contador).type==tokenType.FIN){
-                    int valueSiMientras = stackSiMientras.pop();
-                    int pointerInstruction = stackInstructions.pop();                              
-                    if(valueSiMientras == 2){
+                    int value = stackSiMientras.pop();
+                    int pointerInstruction = stackInstructions.pop();      
+                    if(value == 1){
+                        Statement condition = (Statement) statements.get(pointerInstruction);                        
+                        condition.addAlternativeS(instructionNumber);                        
+                        statements.set(pointerInstruction, condition);
+                    }
+                    else if(value == 2){
                         Statement condition = (Statement) statements.get(pointerInstruction);                        
                         condition.addAlternativeS(instructionNumber);                        
                         statements.set(pointerInstruction, condition);
@@ -128,25 +138,37 @@ public class ParseMetodos {
                         lastStatement.addAlternativeS(pointerInstruction);                        
                         statements.set(instructionNumber - 1, lastStatement);                        
                     }
-                    else if(valueSiMientras==3){
+                    else if(value==3){
                         Statement condition = (Statement) statements.get(pointerInstruction);                        
                         condition.addAlternativeS(instructionNumber);                        
                         statements.set(pointerInstruction, condition);
-                        
                         Statement lastStatement = (Statement) statements.get(instructionNumber - 1);                                                
                         lastStatement.setNextS(pointerInstruction);
-                        lastStatement.addAlternativeS(pointerInstruction);                        
+                        lastStatement.addAlternativeS(pointerInstruction);  
                         statements.set(instructionNumber - 1, lastStatement);  
                     }
-                    
-                    else if(valueSiMientras==4){
-                        
-                    }
-                    else{
+                    else if(value==4){
                         Statement condition = (Statement) statements.get(pointerInstruction);                        
                         condition.addAlternativeS(instructionNumber);                        
                         statements.set(pointerInstruction, condition);
-                    }                    
+                        
+                        Statement lastStatement = (Statement) statements.get(instructionNumber - 1); 
+                        lastStatement.setNextS(instructionNumber);
+                        lastStatement.addAlternativeS(instructionNumber);                        
+                        statements.set(instructionNumber - 1, lastStatement);  
+                        
+                        int otherPointerInstruction = otherStack.pop();
+                        stackSiMientras.pop();
+                        Statement condition2 = (Statement) statements.get(otherPointerInstruction);                        
+                        condition2.addAlternativeS(pointerInstruction);                        
+                        statements.set(otherPointerInstruction, condition2);
+                        
+                        Statement lastStatement2 = (Statement) statements.get(pointerInstruction - 1);                                                
+                        lastStatement2.setNextS(instructionNumber);
+                        lastStatement2.addAlternativeS(instructionNumber);                        
+                        statements.set(pointerInstruction - 1, lastStatement2);  
+                        
+                    }              
                     return true;
                 }
             }
@@ -298,15 +320,16 @@ public class ParseMetodos {
                     if(tokens.get(contador).type==tokenType.INICIO){
                         contador++;
                         stackSiMientras.push(1);                        
+                        aux = instructionNumber;
                         stackInstructions.push(instructionNumber++);                        
                         if(sentenciasBloque()){
-                            contador++;
+                            contador++;                            
                             if(sentenciaSino()){
                                 return true;
                             }
                             else{
                                 return true;
-                            }
+                            }                                    
                         }
                     }
                     else if(sentencias()){
@@ -326,8 +349,9 @@ public class ParseMetodos {
             contador++;
             if(tokens.get(contador).type==tokenType.INICIO){
                 contador++;
+                otherStack.push(aux);               
                 stackSiMientras.push(4);                        
-                stackInstructions.push(instructionNumber++);
+                stackInstructions.push(instructionNumber);
                 if(sentenciasBloque()){
                     contador++;
                     return true;
@@ -413,21 +437,22 @@ public class ParseMetodos {
         
         if(tokens.get(contador).type==tokenType.REPITE){
             contador++;
-            if(tokens.get(contador).type==tokenType.IDENTIFICADOR || tokens.get(contador).type==tokenType.FLOTANTE){
+            if(tokens.get(contador).type==tokenType.IDENTIFICADOR || tokens.get(contador).type==tokenType.FLOTANTE){                                
                 contador++;
-                codicionRepite();
                 if(tokens.get(contador).type==tokenType.VECES){
+                    codicionRepite();
                     contador++;
-                    stackSiMientras.push(3);                    
-                    stackInstructions.push(instructionNumber++);
-                    if(sentenciasBloque()){                        
+                    if(tokens.get(contador).type==tokenType.INICIO){
                         contador++;
-                        return true;
-                    }
+                        stackSiMientras.push(3);
+                        stackInstructions.push(instructionNumber++);
+                        if(sentenciasBloque()){                        
+                            contador++;
+                            return true;
+                        }
+                    }  
+                    
                 }
-                if(sentencias()){
-                    return true;
-                }                
             }     
         }
         contador= temp;
@@ -440,21 +465,22 @@ public class ParseMetodos {
 
     private void codicionRepite() {
         int c = 0, i=0, pos; 
-        ArrayList<Variable> vars = new ArrayList<Variable>();
-        ArrayList<Float> floats = new ArrayList<Float>();
-        
-        if(tokens.get(i).type==tokenType.IDENTIFICADOR){
-            pos = varsTable.indexVariableName(tokens.get(i).text);
-            vars.add(varsTable.getVariables().get(pos));
-            floats.add( -1.0f);
+        int temp = contador;        
+        Variable variable;
+        float _float;
+        if(tokens.get(contador-1).type==tokenType.IDENTIFICADOR){
+            pos = varsTable.indexVariableName(tokens.get(contador-1).text);
+            variable = varsTable.getVariables().get(pos);
+            _float = -1.0f;
         }
         else{
-            vars.add(null);
-            floats.add(Float.parseFloat(tokens.get(i).text));
-        }
-        
-        statements.add( new Statement( instructionNumber, 
-                            new SentenciaRepite(vars,floats), instructionNumber+1));                    
-                    
+            variable = null;
+            _float = Float.parseFloat(tokens.get(contador-1).text);
+        }        
+        statements.add( new Statement( instructionNumber, new SentenciaRepite(variable, _float), instructionNumber+1));                    
     }
 }
+
+
+
+

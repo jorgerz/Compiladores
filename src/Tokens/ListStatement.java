@@ -71,21 +71,16 @@ public class ListStatement {
             if(actualStatement.isSentenciaAsignacionSimple()){
                 SentenciaAsignacionSimple sas = (SentenciaAsignacionSimple)actualStatement.getStatement();                               
                 sas.execute();     
-                mensajesEjecucion+=sas.textEjecucion();
-                i = actualStatement.getNextS();
-                
+                i = actualStatement.getNextS();               
             }
             else if(actualStatement.isSentenciaAsignacionOperacion()){
                 SentenciaAsignacionOperacion sao = (SentenciaAsignacionOperacion)actualStatement.getStatement();                       
                 sao.execute();
-                mensajesEjecucion+=sao.textEjecucion();
-                i = actualStatement.getNextS();
+                i = actualStatement.getNextS();                
             }
             else if(actualStatement.isSentenciaCondicion()){                
                 SentenciaCondicion sc = (SentenciaCondicion)actualStatement.getStatement();
                 sc.posibleJumps(actualStatement.getNextS(),actualStatement.getAlternativeS());                
-//                System.out.println("SentenciaAsignacionCondicion");
-//                System.out.println("Instruccion: " + i);        
                 sc.execute();
                 mensajesEjecucion+=sc.textEjecucion();
                 i = sc.next();
@@ -94,19 +89,23 @@ public class ListStatement {
             else if(actualStatement.isSentenciaEscribir()){
                 SentenciaEscribir se = (SentenciaEscribir)actualStatement.getStatement();                                
                 se.setText("Escribir: ");
-//                System.out.println("SentenciaEscribir");
-//                System.out.println("Instruccion: " + i);        
                 se.execute();
                 mensajesEjecucion+=se.textEjecucion();
                 i = actualStatement.getNextS();
             }
             else if(actualStatement.isSentenciaLeer()){
                 SentenciaLeer sl = (SentenciaLeer)actualStatement.getStatement();                
-//                System.out.println("SentenciaLeer");
-//                System.out.println("Instruccion: " + i);        
+                sl.setText("Introduzca el valor de: "+sl.getVariable().getName());
                 sl.execute();
                 mensajesEjecucion+=sl.textEjecucion();
                 i = actualStatement.getNextS();
+            }
+            else if(actualStatement.isSentenciaRepite()){
+                SentenciaRepite sr = (SentenciaRepite)actualStatement.getStatement();
+                sr.posibleJumps(actualStatement.getNextS(), actualStatement.getAlternativeS());
+                sr.execute();
+                i = sr.next();
+                mensajesEjecucion+=sr.textEjecucion();
             }
             textAreaTokens.setText(mensajesEjecucion);
         }                

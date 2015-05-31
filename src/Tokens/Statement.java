@@ -60,6 +60,10 @@ public class Statement {
         return (statement instanceof SentenciaLeer);
     }
     
+    public boolean isSentenciaRepite(){
+        return (statement instanceof SentenciaRepite);
+    }
+    
     public void setStatement(Object statement){
         this.statement = statement;
     }
